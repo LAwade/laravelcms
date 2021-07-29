@@ -31,13 +31,30 @@ class RegisterController extends Controller
         $validator = Validator::make($data, [
             'name' => 'required|string|max:100|min:4',
             'email' => 'required|string|email|max:150|min:10|unique:users',
-            'password' => 'required|string|max:100|confirmed',
+            'password' => 'required|string|max:20|min:5|confirmed',
             'password_confirmation' => 'required|string|max:20|min:5'
         ]);
 
         if($validator->fails()){
             return redirect()->route('register')->withErrors($validator)->withInput();
         }
+        try {
+            $user = new User();
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
+            $user->code = $this->generateCode();
+            if ($user->save()) {
+                return response()->json([$user], 201);
+            } else {
+                return response()->json([
+                    'error' => 'could not create user'
+                ], 400);
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Internal server error in create user.'], 500);
+        }
+
         return view('admin.register');
     }
 
