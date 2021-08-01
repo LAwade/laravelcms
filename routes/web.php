@@ -3,9 +3,9 @@
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Site\HomeController as SiteHomeController;
 use Illuminate\Support\Facades\Route;
-use PHPUnit\TextUI\XmlConfiguration\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +22,14 @@ Route::get('/', [SiteHomeController::class, 'index']);
 
 Route::prefix('painel')->group(function(){
     Route::get('/', [HomeController::class, 'index'])->name('admin');
+    
     Route::get('login', [LoginController::class, 'index'])->name('login');
     Route::post('login', [LoginController::class, 'authenticate']);
 
     Route::get('register', [RegisterController::class, 'index'])->name('register');
-    Route::get('register', [RegisterController::class, 'register']);
+    Route::post('register', [RegisterController::class, 'register']);
+
+    Route::post('logout', [LoginController::class, 'logout']);
+
+    Route::resource('users', UserController::class);
 });

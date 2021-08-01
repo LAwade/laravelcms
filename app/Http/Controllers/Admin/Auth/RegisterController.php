@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,7 +19,7 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.register');
     }
 
     /**
@@ -42,17 +44,17 @@ class RegisterController extends Controller
             $user = new User();
             $user->name = $data['name'];
             $user->email = $data['email'];
+            //$user->email_verify_at = $data['email'];
             $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
-            $user->code = $this->generateCode();
+            $user->remember_token = password_hash(time(), PASSWORD_DEFAULT);
             if ($user->save()) {
-                return response()->json([$user], 201);
+                Auth::login($user);
+                return redirect()->route('admin');
             } else {
-                return response()->json([
-                    'error' => 'could not create user'
-                ], 400);
+                return redirect()->route('register')->withErrors($validator)->withInput();
             }
         } catch (Exception $e) {
-            return response()->json(['error' => 'Internal server error in create user.'], 500);
+            return response()->json(['error' => 'Internal server error in create user.' . $e->getMessage()], 500);
         }
 
         return view('admin.register');
