@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'classes_body' => '',
+    'classes_body' => 'dark-mode',
     'classes_brand' => '',
     'classes_brand_text' => '',
     'classes_content_wrapper' => '',
@@ -129,7 +129,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar navbar-dark',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '/',
+    'dashboard_url' => 'painel',
     'logout_url' => 'painel/logout',
     'login_url' => 'painel/login',
     'register_url' => 'painel/register',
@@ -249,7 +249,7 @@ return [
         ['header' => 'account_settings'],
         [
             'text'        => 'Dashbord',
-            'url'         => 'painel/admin',
+            'url'         => 'painel',
             'icon'        => 'far fa-fw fa-file',
             'label_color' => 'success',
         ],

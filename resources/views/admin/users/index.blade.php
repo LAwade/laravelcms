@@ -2,11 +2,15 @@
 @section('title', 'Usuários')
 
 @section('content_header')
-    <h1>Todos Usuários</h1>
+    <h1>Todos Usuários
+        <a href="{{ route('users.create') }}" class="btn btn-sm btn-success float-right">
+            <i class="fas fa-plus"></i> Novo Usuário
+        </a>
+    </h1>
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row py-3">
         <div class="col-12">
             <div class="card">
                 <table class="table table-hover text-nowrap">
@@ -25,18 +29,20 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at }}</td>
                                 <td>
-                                    <a href="{{ route('users.edit'), ['user' => $user->id] }}" class="btn btn-flat btn-primary">
-                                        <i class="fas fa-edit"></i>
+                                    <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i> Editar
                                     </a>
-                                    <a href="{{ route('users.destroy'), ['user' => $user->id] }}" class="btn btn-flat btn-danger">
-                                        <i class="fas fa-trash"></i> 
+                                    <a href="{{ route('users.destroy', ['user' => $user->id]) }}" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Excluir
                                     </a>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                
             </div>
         </div>
     </div>
+    {{ $users->links('pagination::bootstrap-4') }}
 @endsection

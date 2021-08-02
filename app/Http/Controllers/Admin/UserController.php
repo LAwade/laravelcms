@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -15,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::paginate(20);
         return view('admin.users.index', [
             'users' => $users
         ]);
@@ -28,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -39,7 +41,31 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only([
+            'name',
+            'email',
+            'password',
+            'password_confirmation'
+        ]);
+
+        $validator = Validator::make($data, [
+            'name' => ['required', 'string', 'min:5', 'max:100'],
+            'email' => ['required', 'string', 'email', 'min:10', 'max:150', 'unique:users'],
+            'password' => ['required', 'string', 'min:5', 'max:20', 'confirmed']
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('users.create')->withErrors($validator)->withInput();
+        }
+
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        if ($user->save()) {
+        }
+
+        return view('admin.users.create');
     }
 
     /**
@@ -61,7 +87,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        if ($user) {
+            return view('admin.users.edit', ['user' => $user]);
+        }
     }
 
     /**
@@ -73,7 +102,43 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        if ($user) {
+            $data = $request->only([
+                'name',
+                'email',
+                'password',
+                'password_confirmation'
+            ]);
+
+            $validator = Validator::make($data, [
+                'name' => ['required', 'string', 'min:5', 'max:100'],
+                'email' => ['required', 'string', 'email', 'min:10', 'max:150'],
+                'password' => ['nullable','required_with:password_confirmation','string','min:5', 'max:20', 'confirmed'] 
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->route('users.edit', $id)->withErrors($validator)->withInput();
+            }
+
+            $user->name = $data['name'];
+
+            if($user->email != $data['email'] && !count(User::where('email', $data['email'])->get())){
+                $user->email = $data['email'];
+            }
+
+            if(!empty($data['password'])){
+                $user->password = Hash::make($data['password']);
+            }
+
+            if($user->save()){
+                return redirect()->route('users.edit', $id)->with('message','Criado com sucesso!');
+            } else{
+                return redirect()->route('users.edit', $id)->withErrors($validator)->withInput();
+                //return redirect()->route('')->withErrors($validator)->withInput();
+            }
+        }
+        
     }
 
     /**

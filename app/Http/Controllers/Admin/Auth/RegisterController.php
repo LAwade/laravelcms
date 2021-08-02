@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -45,8 +46,8 @@ class RegisterController extends Controller
             $user->name = $data['name'];
             $user->email = $data['email'];
             //$user->email_verify_at = $data['email'];
-            $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
-            $user->remember_token = password_hash(time(), PASSWORD_DEFAULT);
+            $user->password = Hash::make($data['password']);
+            $user->remember_token = Hash::make(time());
             if ($user->save()) {
                 Auth::login($user);
                 return redirect()->route('admin');
