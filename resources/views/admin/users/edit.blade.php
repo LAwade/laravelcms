@@ -51,23 +51,5 @@
             <!-- /.card-footer -->
         </form>
     </div>
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-ban"></i> <b>OPSS.. UM ERROR ACONTECEU!</b></h5>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @if (session('message'))
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-ban"></i> <b>TUDO CERTO!</b></h5>
-            {{ session('message') }}
-        </div>
-    @endif
+    @include('flash-message')
 @endsection

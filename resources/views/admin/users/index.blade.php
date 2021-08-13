@@ -29,20 +29,36 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at }}</td>
                                 <td>
-                                    <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('users.edit', ['user' => $user->id]) }}"
+                                        class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
-                                    <a href="{{ route('users.destroy', ['user' => $user->id]) }}" class="btn btn-sm btn-danger">
+                                    @if ($user->id != $loggedid)
+                                        <form class="d-inline" method="POST"
+                                            action="{{ route('users.destroy', ['user' => $user->id]) }}"
+                                            onsubmit="return confirm('Deseja excluir esse usuário?')">
+
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </button>
+                                        </form>
+                                    @else
+                                    <button class="btn btn-sm btn-danger" disabled
+                                    >
                                         <i class="fas fa-trash"></i> Excluir
-                                    </a>
+                                    </button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
     </div>
+    @include('flash-message')
     {{ $users->links('pagination::bootstrap-4') }}
 @endsection

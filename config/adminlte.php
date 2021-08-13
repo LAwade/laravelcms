@@ -246,29 +246,36 @@ return [
         //     'url'  => 'admin/blog',
         //     'can'  => 'manage-blog',
         // ],
-        ['header' => 'account_settings'],
+        ['header' => 'Administração'],
         [
             'text'        => 'Dashbord',
             'url'         => 'painel',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-tachometer-alt',
             'label_color' => 'success',
         ],
         [
             'text'        => 'pages',
             'url'         => 'painel/pages',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-file-alt',
             'label_color' => 'success',
         ],
         [
             'text'        => 'Usuários',
             'url'         => 'painel/users',
-            'icon'        => 'far fa-fw fa-file',
+            'icon'        => 'fas fa-users',
             'label_color' => 'success',
+            'can'         => 'edit-users'
         ],
+        ['header' => 'Configurações'],
         [
             'text' => 'profile',
-            'url'  => 'admin/settings',
+            'url'  => 'painel/profile',
             'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Configurações do site',
+            'url'  => 'painel/settings',
+            'icon' => 'fas fa-cogs',
         ]
     ],
 
